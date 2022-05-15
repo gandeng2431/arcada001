@@ -69,3 +69,4 @@ if not finished:
             s.rect.x -= robin.x_speed
         for s in enemies:
             s.rect.x -= robin.x_speed
+ 
