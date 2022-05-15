@@ -27,6 +27,17 @@ C_GREEN=(32,128,32)
 C_RED=(255,0,0)
 C_BLACK=(0,0,0,)
 
+# создание врагов и мин 
+en = Enemy(300,330)
+all_sprites.add(en)
+enemies.add(en)
+
+bomb = Enemy(250,200, img_file_bomb, 60,60)
+bombs.add(bomb)
+
+door = FinalSprite(img_file_door, win_width + 500, win_height - 150, 0)
+all_sprites.add(door)
+
 #final sprite
 class FinalSprite(sprite.Sprite):
     def __init__(self, player_image, player_x , player_y, player_speed):
