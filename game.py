@@ -50,6 +50,55 @@ class FinalSprite(sprite.Sprite):
         self.rect.x = player_x
         self.rect.y = player_y
         
+#главный герой методы,свойства
+class Hero(sprite.Sprite):
+    def __init__(self, filename, x_speed=0, e_speed=0, x=x_start, y=y_start, width=60, heidht=60):
+        sprite.Sprite.__init__(self)
+        self.image = transform.scale(image.load(filename), (width, height)).convert_alpha()
+
+        self.rect = self = self.image.get_rect()
+
+        self.rect.x = x 
+        self.rect.y = y
+
+        self.x_speed = x_speed
+        self.y_speed = y_speed 
+
+        self.stands_on = False
+    def gravitate(self):
+        self.y_speed += 0.25
+
+    def jump(self, y):
+        if self.stands_on:
+            self.y_speed = y
+    
+    def update(self):
+        self.rect.x += self.x_speed
+
+        platforms_touched = sprite.spritecollide(self, barries, False)
+        if self.x_speed > 0:
+            for p in platforms_touched:
+                self.rect.right = min(self.rect.right, p.rect.left)
+        elif self.x_speed < 0:
+            for p in platforms_touched:
+                self.rect.left = max(self.rect.left, p.rect.right)
+
+        self.gravitate()
+        self.rect.y += self.y_speed
+
+        platforms_touched = sprite.spritecollide(self, barries, False)
+        if self.y_speed > 0:
+            for p in platforms_touched:
+                self.y_speed = 0
+                if p.rect.top < self.rect.bottom:
+                    self.rect.bottom = p.rect.top
+                    self.stands_on = p
+        elif self.y_speed < 0:
+            self.stands_on = False
+            for p in platforms_touched:
+                self.y_speed = 0
+                self.rect.top = max(self.rect.top, p.rect.bottom)
+
 # в цикде пока не финиш
 if not finished:
     all_sprites.update()
