@@ -49,3 +49,23 @@ class FinalSprite(sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = player_x
         self.rect.y = player_y
+        
+# в цикде пока не финиш
+if not finished:
+    all_sprites.update()
+    sprite.groupcollide(bombs,all_sprites, True,True)
+    
+    if sprite.spritesollide(robin,enemies, False):
+        robin.kill()
+    if (
+        robin.rect.x > right_bound and robin.x_speed > 0
+        or
+        robin.rect.x < left_bound and robin.x_speed < 0
+    ):
+        shift -= robin.x_speed
+        for s in all_sprites:
+            s.rect.x -= robin.x_speed
+        for s in bombs:
+            s.rect.x -= robin.x_speed
+        for s in enemies:
+            s.rect.x -= robin.x_speed
