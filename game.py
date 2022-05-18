@@ -16,7 +16,7 @@ img_file_back='bg.jpg'
 img_file_hero='player.png'
 img_file_enemy='sprite.png'
 img_file_bomb='bomb.png'
-img_file_door='dor.png'
+img_file_door='door.png'
 img_wall='wall.png'
 FPS=60
 
