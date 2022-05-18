@@ -99,6 +99,25 @@ class Hero(sprite.Sprite):
                 self.y_speed = 0
                 self.rect.top = max(self.rect.top, p.rect.bottom)
 
+# Класс врага
+class Enemy(sprite.sprite):
+    def __init__(self, x=20, y=0, filename=img_file_enemy, width=60, height=60):
+        sprite.Sprite.__init__(self)
+        self.image = transform.scale(image.load(filename), (width, height)).convert_alpha()
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+    def update(self):
+        if self.rect.x <= 300:
+            self.side = "right"
+        if self.rect.x >= 600:
+            self.side = "left"
+        if self.side == "left":
+            self.rect.x -= 5
+        else:
+            self.rect.x += 5
+            
 # в цикде пока не финиш
 if not finished:
     all_sprites.update()
