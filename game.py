@@ -108,8 +108,16 @@ class Wall(sprite.Sprite):
         self.rect = self.get_rect()
         self.rect.x = x
         self.rect.y = y
-        
-# Класс врага
+#создание стен (Писал Даня AKA Albatrosik)
+list_blocks=['1100100010001111','00110100000','000011110000111','00111111111111111111111111','00111111111111111111111111111']
+for i in range(len(list_blocks)):
+    for j in range(len(list_blocks[i])):
+        if list_blocks[i][j]=='1':
+            print(i,j)
+            w = Wall(img_wall,(j)*80,(i+1)*130, 100, 50)
+            barriers.add(w)
+            all_sprites.add(w)
+# Класс врага (Писал Даня AKA Albatrosik)
 class Enemy(sprite.sprite):
     def __init__(self, x=20, y=0, filename=img_file_enemy, width=60, height=60):
         sprite.Sprite.__init__(self)
@@ -163,7 +171,7 @@ if not finished:
 
             text = font.render("YOU WIN!", 1, C_RED)
             window.blit(text, (250, 250))
-                # проверка на выйгрыш и пройгрыш
+                # проверка на выйгрыш и пройгрыш (Писал Даня AKA Albatrosik)
     if sprite.collide_rect(robin, door):
         finished = True
         #window.fill(C_BLACK)
@@ -178,3 +186,4 @@ if not finished:
         #пишем текст на экране
         text = font.render('Ты проиграл:(', 1 , C_RED)
         window.blit(text, (250,250))
+
