@@ -138,3 +138,18 @@ if not finished:
         for s in enemies:
             s.rect.x -= robin.x_speed
  
+#конец игры часть 1:
+        local_shift = shift % win_width
+        window.blit(back, (local_shift, 0))
+        if local_shift != 0:
+            window.blit(back, (local_shift - win_width, 0))
+
+        all_sprites.draw(window)
+
+        bombs.draw(window)
+
+        if sprite.collide_rect(robin, door):
+            finished = True
+
+            text = font.render("YOU WIN!", 1, C_RED)
+            window.blit(text, (250, 250))
