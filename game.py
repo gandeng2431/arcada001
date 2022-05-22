@@ -135,26 +135,46 @@ class Enemy(sprite.sprite):
             self.rect.x -= 5
         else:
             self.rect.x += 5
-            
+#основной цикл
+run = True
+finished = False
+
+while run:
+    for e in event.get():
+        if e.type == QUIT:
+            run = False
+        elif e.type == KEYDOWN:
+            if e.key == K_LEFT:
+                robin.x_speed = -5
+            elif e.key == K_RIGHT:
+                robin.x_speed = 5
+            elif e.key == K_UP:
+                robin.jump(-7)
+
+        elif e.type == KEYUP:
+            if e.key == K_LEFT:
+                robin.x_speed = 0
+            elif e.key == K_RIGHT:
+                robin.x_speed = 0
 # в цикде пока не финиш
-if not finished:
-    all_sprites.update()
-    sprite.groupcollide(bombs,all_sprites, True,True)
-    
-    if sprite.spritesollide(robin,enemies, False):
-        robin.kill()
-    if (
-        robin.rect.x > right_bound and robin.x_speed > 0
-        or
-        robin.rect.x < left_bound and robin.x_speed < 0
-    ):
-        shift -= robin.x_speed
-        for s in all_sprites:
-            s.rect.x -= robin.x_speed
-        for s in bombs:
-            s.rect.x -= robin.x_speed
-        for s in enemies:
-            s.rect.x -= robin.x_speed
+    if not finished:
+        all_sprites.update()
+        sprite.groupcollide(bombs,all_sprites, True,True)
+
+        if sprite.spritesollide(robin,enemies, False):
+            robin.kill()
+        if (
+            robin.rect.x > right_bound and robin.x_speed > 0
+            or
+            robin.rect.x < left_bound and robin.x_speed < 0
+        ):
+            shift -= robin.x_speed
+            for s in all_sprites:
+                s.rect.x -= robin.x_speed
+            for s in bombs:
+                s.rect.x -= robin.x_speed
+            for s in enemies:
+                s.rect.x -= robin.x_speed
  
 #конец игры часть 1:
         local_shift = shift % win_width
@@ -186,4 +206,3 @@ if not finished:
         #пишем текст на экране
         text = font.render('Ты проиграл:(', 1 , C_RED)
         window.blit(text, (250,250))
-
