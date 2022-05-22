@@ -99,7 +99,7 @@ class Hero(sprite.Sprite):
                 self.y_speed = 0
                 self.rect.top = max(self.rect.top, p.rect.bottom)
 
-# Класс врага
+# Класс врага (Эт тоже писал даня)
 class Enemy(sprite.sprite):
     def __init__(self, x=20, y=0, filename=img_file_enemy, width=60, height=60):
         sprite.Sprite.__init__(self)
@@ -118,7 +118,7 @@ class Enemy(sprite.sprite):
         else:
             self.rect.x += 5
             
-# в цикде пока не финиш
+# в цикле пока не финиш
 if not finished:
     all_sprites.update()
     sprite.groupcollide(bombs,all_sprites, True,True)
@@ -137,4 +137,18 @@ if not finished:
             s.rect.x -= robin.x_speed
         for s in enemies:
             s.rect.x -= robin.x_speed
- 
+ # проверка на финиш и проигрыш (Писал Даня)
+if sprite.collide_rect(robin, door):
+    finished = True
+    #window.fill(C_BLACK)
+    #пишем текст на экране
+    text = font.render("Ты Выйграл!", 1, C_GREEN)
+    window.blit(text, (250,250))
+
+#проверка на пройгрыш
+if robin not in all_sprites or robin.rect.top > win_height:
+    finished = True
+    #window.fill(C_BLACK)
+    #пишем текст на экране
+    text = font.render('Ты проиграл:(', 1 , C_RED)
+    window.blit(text, (250,250))
