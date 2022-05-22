@@ -135,6 +135,19 @@ class Enemy(sprite.sprite):
             self.rect.x -= 5
         else:
             self.rect.x += 5
+#запуск игры
+display.set_caption('ARCADA')
+window = display.set_mode([win_width, win_height])
+
+back = transform.scale(image.load(img_file_back).convert(), (win_width, win_height))
+
+all_sprites = sprite.Group()
+barriers = sprite.Group()
+enemies = sprite.Group()
+bombs = sprite.Group()
+
+robin = Hero(img_file_hero)
+all.sprites.add(robin)
 #основной цикл
 run = True
 finished = False
