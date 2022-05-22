@@ -98,7 +98,17 @@ class Hero(sprite.Sprite):
             for p in platforms_touched:
                 self.y_speed = 0
                 self.rect.top = max(self.rect.top, p.rect.bottom)
-
+                
+#стены класс:
+class Wall(sprite.Sprite):
+    def __init__(self, filename, x=20, y=0, width=100, height=100):
+        sprite.Sprite.__init__(self)
+        self.image = transform.scale(image.load(filename), (width, height)).conver_alpha()
+        
+        self.rect = self.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        
 # Класс врага
 class Enemy(sprite.sprite):
     def __init__(self, x=20, y=0, filename=img_file_enemy, width=60, height=60):
