@@ -1,4 +1,4 @@
-from random import randit
+from random import randint
 from pygame import*
 font.init()
 font=font.Font(None,72)
