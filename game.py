@@ -28,6 +28,7 @@ C_RED=(255,0,0)
 C_BLACK=(0,0,0,)
 
 
+
 #final sprite
 class FinalSprite(sprite.Sprite):
     def __init__(self, player_image, player_x , player_y, player_speed):
@@ -42,11 +43,11 @@ class FinalSprite(sprite.Sprite):
         
 #главный герой методы,свойства
 class Hero(sprite.Sprite):
-    def __init__(self, filename, x_speed=0, e_speed=0, x=x_start, y=y_start, width=60, heidht=60):
+    def __init__(self, filename, x_speed=0, y_speed=0, x=x_start, y=y_start, width=60, height=60):
         sprite.Sprite.__init__(self)
         self.image = transform.scale(image.load(filename), (width, height)).convert_alpha()
 
-        self.rect = self = self.image.get_rect()
+        self.rect = self.image.get_rect()
 
         self.rect.x = x 
         self.rect.y = y
@@ -65,7 +66,7 @@ class Hero(sprite.Sprite):
     def update(self):
         self.rect.x += self.x_speed
 
-        platforms_touched = sprite.spritecollide(self, barries, False)
+        platforms_touched = sprite.spritecollide(self, barriers, False)
         if self.x_speed > 0:
             for p in platforms_touched:
                 self.rect.right = min(self.rect.right, p.rect.left)
@@ -76,7 +77,7 @@ class Hero(sprite.Sprite):
         self.gravitate()
         self.rect.y += self.y_speed
 
-        platforms_touched = sprite.spritecollide(self, barries, False)
+        platforms_touched = sprite.spritecollide(self, barriers, False)
         if self.y_speed > 0:
             for p in platforms_touched:
                 self.y_speed = 0
@@ -93,7 +94,7 @@ class Hero(sprite.Sprite):
 class Wall(sprite.Sprite):
     def __init__(self, filename, x=20, y=0, width=100, height=100):
         sprite.Sprite.__init__(self)
-        self.image = transform.scale(image.load(filename), (width, height)).conver_alpha()
+        self.image = transform.scale(image.load(filename), (width, height)).convert_alpha()
         
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -117,7 +118,6 @@ class Enemy(sprite.Sprite):
         else:
             self.rect.x += 5
             
- 
 
 #запуск игры
 display.set_caption('ARCADA')
@@ -131,14 +131,8 @@ enemies = sprite.Group()
 bombs = sprite.Group()
 
 robin = Hero(img_file_hero)
-all.sprites.add(robin)
-# создание врагов и мин 
-en = Enemy(300,330)
-all_sprites.add(en)
-enemies.add(en)
+all_sprites.add(robin)
 
-bomb = Enemy(250,200, img_file_bomb, 60,60)
-bombs.add(bomb)
 #создание стен (Писал Даня AKA Albatrosik)
 list_blocks=['1100100010001111','00110100000','000011110000111','00111111111111111111111111','00111111111111111111111111111']
 for i in range(len(list_blocks)):
@@ -148,6 +142,15 @@ for i in range(len(list_blocks)):
             w = Wall(img_wall,(j)*80,(i+1)*130, 100, 50)
             barriers.add(w)
             all_sprites.add(w)
+
+
+# создание врагов и мин 
+en = Enemy(300,330)
+all_sprites.add(en)
+enemies.add(en)
+
+bomb = Enemy(250,200, img_file_bomb, 60,60)
+bombs.add(bomb)
 
 door = FinalSprite(img_file_door, win_width + 500, win_height - 150, 0)
 all_sprites.add(door)
@@ -178,7 +181,7 @@ while run:
         all_sprites.update()
         sprite.groupcollide(bombs,all_sprites, True,True)
 
-        if sprite.spritesollide(robin,enemies, False):
+        if sprite.spritecollide(robin,enemies, False):
             robin.kill()
         if (
             robin.rect.x > right_bound and robin.x_speed > 0
@@ -223,8 +226,9 @@ while run:
         #пишем текст на экране
         text = font.render('Ты проиграл:(', 1 , C_RED)
         window.blit(text, (250,250))
+
     display.update() 
 
     # Пауза
     time.delay(20)
-display.update() 
+display.update()
