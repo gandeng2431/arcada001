@@ -108,7 +108,7 @@ for i in range(len(list_blocks)):
             barriers.add(w)
             all_sprites.add(w)
 # Класс врага (Писал Даня AKA Albatrosik)
-class Enemy(sprite.sprite):
+class Enemy(sprite.Sprite):
     def __init__(self, x=20, y=0, filename=img_file_enemy, width=60, height=60):
         sprite.Sprite.__init__(self)
         self.image = transform.scale(image.load(filename), (width, height)).convert_alpha()
