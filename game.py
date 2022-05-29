@@ -27,16 +27,6 @@ C_GREEN=(32,128,32)
 C_RED=(255,0,0)
 C_BLACK=(0,0,0,)
 
-# создание врагов и мин 
-en = Enemy(300,330)
-all_sprites.add(en)
-enemies.add(en)
-
-bomb = Enemy(250,200, img_file_bomb, 60,60)
-bombs.add(bomb)
-
-door = FinalSprite(img_file_door, win_width + 500, win_height - 150, 0)
-all_sprites.add(door)
 
 #final sprite
 class FinalSprite(sprite.Sprite):
@@ -135,6 +125,8 @@ class Enemy(sprite.sprite):
             self.rect.x -= 5
         else:
             self.rect.x += 5
+            
+
 #запуск игры
 display.set_caption('ARCADA')
 window = display.set_mode([win_width, win_height])
@@ -148,6 +140,17 @@ bombs = sprite.Group()
 
 robin = Hero(img_file_hero)
 all.sprites.add(robin)
+# создание врагов и мин 
+en = Enemy(300,330)
+all_sprites.add(en)
+enemies.add(en)
+
+bomb = Enemy(250,200, img_file_bomb, 60,60)
+bombs.add(bomb)
+
+door = FinalSprite(img_file_door, win_width + 500, win_height - 150, 0)
+all_sprites.add(door)
+
 #основной цикл
 run = True
 finished = False
