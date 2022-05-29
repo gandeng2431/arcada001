@@ -223,3 +223,8 @@ while run:
         #пишем текст на экране
         text = font.render('Ты проиграл:(', 1 , C_RED)
         window.blit(text, (250,250))
+    display.update() 
+
+    # Пауза
+    time.delay(20)
+display.update() 
