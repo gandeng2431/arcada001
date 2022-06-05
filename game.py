@@ -205,19 +205,14 @@ while run:
         all_sprites.draw(window)
 
         bombs.draw(window)
-
+        
+                # проверка на выйгрыш и пройгрыш (Писал Даня AKA Albatrosik)
         if sprite.collide_rect(robin, door):
             finished = True
-
-            text = font.render("YOU WIN!", 1, C_RED)
-            window.blit(text, (250, 250))
-                # проверка на выйгрыш и пройгрыш (Писал Даня AKA Albatrosik)
-    if sprite.collide_rect(robin, door):
-        finished = True
-        #window.fill(C_BLACK)
-        #пишем текст на экране
-        text = font.render("Ты Выйграл!", 1, C_GREEN)
-        window.blit(text, (250,250))
+            #window.fill(C_BLACK)
+            #пишем текст на экране
+            text = font.render("Ты Выйграл!", 1, C_GREEN)
+            window.blit(text, (250,250))
 
 #проверка на пройгрыш
     if robin not in all_sprites or robin.rect.top > win_height:
