@@ -2,9 +2,9 @@ from random import randint
 from pygame import*
 font.init()
 font=font.Font(None,72)
-#mixer.init()
-#mixer.init.load('')
-#mixer.musik.play()
+mixer.init()
+mixer.music.load('music.ogg')
+mixer.music.play()
 win_width=800
 win_height=600
 left_bound=win_width / 40
@@ -34,7 +34,7 @@ class FinalSprite(sprite.Sprite):
     def __init__(self, player_image, player_x , player_y, player_speed):
         sprite.Sprite.__init__(self)
 
-        self.image = transform.scale(image.load(player_image) , (100 ,100))
+        self.image = transform.scale(image.load(player_image) , (50 , 100))
         self.speed = player_speed
 
         self.rect = self.image.get_rect()
@@ -43,7 +43,7 @@ class FinalSprite(sprite.Sprite):
         
 #главный герой методы,свойства
 class Hero(sprite.Sprite):
-    def __init__(self, filename, x_speed=0, y_speed=0, x=x_start, y=y_start, width=60, height=60):
+    def __init__(self, filename, x_speed=0, y_speed=0, x=x_start, y=y_start, width=40, height=60):
         sprite.Sprite.__init__(self)
         self.image = transform.scale(image.load(filename), (width, height)).convert_alpha()
 
@@ -152,7 +152,7 @@ enemies.add(en)
 bomb = Enemy(250,200, img_file_bomb, 60,60)
 bombs.add(bomb)
 
-door = FinalSprite(img_file_door, win_width + 500, win_height - 150, 0)
+door = FinalSprite(img_file_door, win_width + 500, win_height - 170, 0)
 all_sprites.add(door)
 
 #основной цикл
@@ -205,7 +205,7 @@ while run:
         all_sprites.draw(window)
 
         bombs.draw(window)
-        
+
                 # проверка на выйгрыш и пройгрыш (Писал Даня AKA Albatrosik)
         if sprite.collide_rect(robin, door):
             finished = True
