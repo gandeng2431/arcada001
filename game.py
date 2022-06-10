@@ -1,9 +1,10 @@
 from random import randint
 from pygame import*
 font.init()
-font=font.Font(None,72)
+font1 = font.Font(None, 72)
+font2 = font.Font(None, 36)
 mixer.init()
-mixer.music.load('music.ogg')
+mixer.music.load('Mii Channel Music.ogg')
 mixer.music.play()
 win_width=800
 win_height=600
@@ -12,12 +13,14 @@ right_bound=win_height - 8 * left_bound
 shift=0
 x_start=20
 y_start=10
-img_file_back='bg.jpg'
+img_file_back='bg.png'
 img_file_hero='player.png'
 img_file_enemy='sprite.png'
 img_file_bomb='bomb.png'
 img_file_door='door.png'
 img_wall='wall.png'
+img_mushroom="mushroom.png"
+img_start='start.png'
 FPS=60
 
 C_WHITE=(255,255,255)
@@ -130,6 +133,8 @@ barriers = sprite.Group()
 enemies = sprite.Group()
 bombs = sprite.Group()
 
+count_mushrooms = font2.render("Количество грибов: "+"0", 1, C_WHITE)
+window.blit(count_mushrooms, (10, 10))
 robin = Hero(img_file_hero)
 all_sprites.add(robin)
 
@@ -155,6 +160,14 @@ bombs.add(bomb)
 door = FinalSprite(img_file_door, win_width + 500, win_height - 170, 0)
 all_sprites.add(door)
 
+mushrooms = sprite.Group()
+mushroom=FinalSprite(img_mushroom, 500,  130, 0)
+mushrooms.add(mushroom)
+all_sprites.add(mushroom)
+mushroom2=FinalSprite(img_mushroom, 700, 200, 0)
+mushrooms.add(mushroom2)
+all_sprites.add(mushroom2)
+count_k = 0
 #основной цикл
 run = True
 finished = False
@@ -195,13 +208,19 @@ while run:
                 s.rect.x -= robin.x_speed
             for s in enemies:
                 s.rect.x -= robin.x_speed
- 
+        if sprite.spritecollide(robin, mushrooms, False):
+            mushroom.kill() # метод kill убирает спрайт из всех групп, в которых он числится
+            count_k+=1
+            count_mushrooms = font2.render("Количество грибов: "+str(count_k), 1, C_WHITE)
+        if sprite.spritecollide(robin, mushrooms, False):
+            mushroom2.kill() # метод kill убирает спрайт из всех групп, в которых он числится
+            count_mushrooms = font2.render("Количество грибов: "+str(count_k), 1, C_WHITE)
 #конец игры часть 1:
         local_shift = shift % win_width
         window.blit(back, (local_shift, 0))
         if local_shift != 0:
             window.blit(back, (local_shift - win_width, 0))
-
+        window.blit(count_mushrooms, (20, 20))
         all_sprites.draw(window)
 
         bombs.draw(window)
@@ -211,7 +230,7 @@ while run:
             finished = True
             #window.fill(C_BLACK)
             #пишем текст на экране
-            text = font.render("Ты Выйграл!", 1, C_GREEN)
+            text = font1.render("Ты Выйграл!", 1, C_GREEN)
             window.blit(text, (250,250))
 
 #проверка на пройгрыш
@@ -219,7 +238,7 @@ while run:
         finished = True
         #window.fill(C_BLACK)
         #пишем текст на экране
-        text = font.render('Ты проиграл:(', 1 , C_RED)
+        text = font1.render('Ты проиграл:(', 1 , C_RED)
         window.blit(text, (250,250))
 
     display.update() 
