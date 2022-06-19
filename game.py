@@ -13,7 +13,7 @@ right_bound=win_height - 8 * left_bound
 shift=0
 x_start=20
 y_start=10
-img_file_back='bg.png'
+img_file_back='back.png'
 img_file_hero='player.png'
 img_file_enemy='sprite.png'
 img_file_bomb='bomb.png'
@@ -21,6 +21,7 @@ img_file_door='door.png'
 img_wall='wall.png'
 img_mushroom="mushroom.png"
 img_start='start.png'
+img_fon='fon.jpg'
 FPS=60
 
 C_WHITE=(255,255,255)
@@ -120,14 +121,46 @@ class Enemy(sprite.Sprite):
             self.rect.x -= 5
         else:
             self.rect.x += 5
+
+class CoinSprite(sprite.Sprite):
+  # конструктор класса
+  def __init__(self, filename, player_x, player_y, width=50, height=50):
+        # Вызываем конструктор класса (Sprite):
+        sprite.Sprite.__init__(self)
+
+        # каждый спрайт должен хранить свойство image - изображение
+        # картинка загружается из файла и умещается в прямоугольник нужных размеров:
+        self.image = transform.scale(image.load(filename), (width, height)).convert_alpha() 
+                        # используем convert_alpha, нам надо сохранять прозрачность
+
+            # каждый спрайт должен хранить свойство rect - прямоугольник. Это свойство нужно для определения касаний спрайтов.         
+
+        self.rect = self.image.get_rect()
+        self.rect.x = player_x
+        self.rect.y = player_y
             
+# класс кнопка
+class Button(sprite.Sprite):
+  # конструктор класса
+    def __init__(self, player_image, player_x, player_y):
+        # Вызываем конструктор класса (Sprite):
+        sprite.Sprite.__init__(self)
+
+        # каждый спрайт должен хранить свойство image - изображение
+        self.image = transform.scale(image.load(player_image), (200, 100))
+        # каждый спрайт должен хранить свойство rect - прямоугольник, в который он вписан           
+        self.rect = self.image.get_rect()
+        self.rect.x = player_x
+        self.rect.y = player_y
+    def collidepoint(self, x, y):
+        return self.rect.collidepoint(x, y)
 
 #запуск игры
 display.set_caption('ARCADA')
 window = display.set_mode([win_width, win_height])
 
 back = transform.scale(image.load(img_file_back).convert(), (win_width, win_height))
-
+back_start = transform.scale(image.load(img_fon).convert(), (win_width, win_height))
 all_sprites = sprite.Group()
 barriers = sprite.Group()
 enemies = sprite.Group()
@@ -137,6 +170,11 @@ count_mushrooms = font2.render("Количество грибов: "+"0", 1, C_W
 window.blit(count_mushrooms, (10, 10))
 robin = Hero(img_file_hero)
 all_sprites.add(robin)
+
+# список кнопок:
+buttons = sprite.Group()
+button1 = Button(img_start,300,250) 
+buttons.add(button1)
 
 #создание стен (Писал Даня AKA Albatrosik)
 list_blocks=['1100100010001111','00110100000','000011110000111','00111111111111111111111111','00111111111111111111111111111']
@@ -170,7 +208,7 @@ all_sprites.add(mushroom2)
 count_k = 0
 #основной цикл
 run = True
-finished = False
+finished = True
 
 while run:
     for e in event.get():
@@ -189,14 +227,36 @@ while run:
                 robin.x_speed = 0
             elif e.key == K_RIGHT:
                 robin.x_speed = 0
+        if e.type==MOUSEBUTTONDOWN and e.button == 1:
+            x, y = e.pos
+            if button1.collidepoint(x,y):
+                finished = False
+                button1.kill()
+                robin.kill()
+                for mushroom in mushrooms:
+                    mushroom.kill()
+                for bomb in bombs:
+                    bomb.kill()
+                robin = Hero(img_file_hero)
+                all_sprites.add(robin)
+                mushroom=CoinSprite(img_mushroom,randint(300,500),100,100)
+                mushrooms.add(mushroom)
+                all_sprites.add(mushroom)
+                bomb=Enemy(randint(50,500),200,img_file_bomb,60,60)
+                bombs.add(bomb)
+                count_k=0
+
 # в цикде пока не финиш
     if not finished:
         all_sprites.update()
         sprite.groupcollide(bombs,all_sprites, True,True)
-
+        if sprite.spritecollide(robin,bombs,False):
+            robin.rect.x=20
+            robin.rect.y=20
         if sprite.spritecollide(robin,enemies, False):
             robin.kill()
-        if (
+            finished=True
+        if (                                                        
             robin.rect.x > right_bound and robin.x_speed > 0
             or
             robin.rect.x < left_bound and robin.x_speed < 0
@@ -230,19 +290,27 @@ while run:
             finished = True
             #window.fill(C_BLACK)
             #пишем текст на экране
-            text = font1.render("Ты Выйграл!", 1, C_GREEN)
+            text = font1.render("Ты Выиграл!", 1, C_GREEN)
             window.blit(text, (250,250))
 
 #проверка на пройгрыш
-    if robin not in all_sprites or robin.rect.top > win_height:
-        finished = True
-        #window.fill(C_BLACK)
-        #пишем текст на экране
-        text = font1.render('Ты проиграл:(', 1 , C_RED)
-        window.blit(text, (250,250))
+        if robin not in all_sprites or robin.rect.top > win_height:
+            finished = True
+            #window.fill(C_BLACK)
+            #пишем текст на экране
+            text = font1.render('Ты проиграл:(', 1 , C_RED)
+            window.blit(text, (250,250))
 
-    display.update() 
+            display.update() 
 
+    else: 
+        window.blit(back, (0,0))       
+        button1 = Button(img_start,300,250) 
+        buttons.add(button1)
+        buttons.draw(window)
+        button1.update()
+        count_k = 0
+       
     # Пауза
     time.delay(20)
-display.update()
+    display.update()
